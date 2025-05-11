@@ -1,7 +1,7 @@
-import { FeaturesSectionDemo } from "./Components/DocFeat";
+import { FeaturesSectionDemo } from "../Components/DocFeat";
 import Footer from "@/components/Footer";
-import Hero from "./Components/DocHero";
-import { NavbarDemo } from "./Components/DocNav";
+import Hero from "../Components/DocHero";
+import { NavbarDemo } from "../Components/DocNav";
 import Image from "next/image";
 
 export default function DoctorDashboard() {

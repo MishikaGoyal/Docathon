@@ -1,16 +1,29 @@
+import { NavbarDemo } from "@/components/Navbar";
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
+import { div } from "framer-motion/client";
+import { FeaturesSectionDemo } from "@/components/Featmain";
+import Footer from "@/components/Footer";
 
 function page() {
   return (
     <div>
-      <div className="flex gap-6">
-        <Link href="/doctor/dashboard">
-          <button>Doctor</button>
-        </Link>
-        <Link href="/patient/dashboard">
-          <button>Patient</button>
-        </Link>
+      <NavbarDemo />
+      <div className="mt-28 ml-14">
+        <Image
+          src="/home.gif"
+          width={600}
+          height={500}
+          alt="img"
+          className="rounded-xl"
+        />
+      </div>
+      <div className="-mt-4 " id="features">
+        <FeaturesSectionDemo />
+      </div>
+      <div>
+        <Footer />
       </div>
     </div>
   );

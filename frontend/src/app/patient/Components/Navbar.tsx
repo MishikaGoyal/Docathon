@@ -10,18 +10,31 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
+import Link from "next/link";
 import { useState } from "react";
 
 export function NavbarDemo() {
   const navItems = [
     {
       name: "Transcribe",
-      link: "#features",
+      link: "/patient/transcribe",
     },
 
     {
-      name: "Cancer Treatment",
-      link: "#contact",
+      name: "Summarise",
+      link: "/patient/summary",
+    },
+    {
+      name: "Cancer Awareness",
+      link: "/patient/aware",
+    },
+    {
+      name: "Drug Interaction Analysis",
+      link: "/patient/DrugInteraction",
+    },
+    {
+      name: "Self Diagnosis",
+      link: "/patient/DrugInteraction",
     },
   ];
 
@@ -33,6 +46,7 @@ export function NavbarDemo() {
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
+
           <NavItems items={navItems} />
         </NavBody>
 
