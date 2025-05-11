@@ -10,18 +10,21 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import Link from "next/link";
 import { useState } from "react";
 
 export function NavbarDemo() {
   const navItems = [
     {
-      name: "Features",
-      link: "#feature",
+      name: "Transcribe",
+      link: "#features",
     },
 
     {
-      name: "Contact",
+      name: "Cancer Treatment",
+      link: "#contact",
+    },
+    {
+      name: "Drug Interaction",
       link: "#contact",
     },
   ];

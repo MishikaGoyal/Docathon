@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { NavbarDemo } from "@/components/Navbar";
+import { NavbarDemo } from "@/app/patient/Components/Navbar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
