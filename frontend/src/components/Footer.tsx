@@ -9,7 +9,7 @@ function Footer() {
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 ">
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-blue-500 bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-gradient-to-r from-purple-500 to-purple-500 bg-clip-text text-transparent">
                   Docathon
                 </span>
               </div>

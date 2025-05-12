@@ -35,6 +35,13 @@ export function NavbarDemo() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
+          <div className="flex items-center gap-4">
+            <NavbarButton variant="secondary" href="/auth/login">
+              Login
+            </NavbarButton>
+
+            <NavbarButton variant="primary">Register</NavbarButton>
+          </div>
         </NavBody>
 
         {/* Mobile Navigation */}
