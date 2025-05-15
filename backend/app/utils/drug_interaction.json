@@ -1,0 +1,274 @@
+[
+    {
+      "precipitant_drug": ["Ampicillin", "Amoxicillin"],
+      "object_drug": "Oral contraceptives",
+      "interaction": "Interrupts estrogen recycling results in contraceptive failure",
+      "remarks": "Use barrier contraception during and 7 days after."
+    },
+    {
+      "precipitant_drug": ["Ampicillin", "Amoxicillin"],
+      "object_drug": "Warfarin",
+      "interaction": "decrease in Gut vit K results in rise in bleeding risk",
+      "remarks": "Monitor INR; reduce dose if needed."
+    },
+    {
+      "precipitant_drug": "Probenecid",
+      "object_drug": ["Penicillin", "Ampicillin", "Cephalosporins"],
+      "interaction": "Inhibits tubular secretion results in prolongs antibiotic action",
+      "remarks": "Therapeutically used to extend half-life."
+    },
+    {
+      "precipitant_drug": "Allopurinol",
+      "object_drug": "Ampicillin",
+      "interaction": "rise in Rash incidence",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": "Allopurinol",
+      "object_drug": ["6-Mercaptopurine", "Azathioprine"],
+      "interaction": "Inhibits metabolism results in toxicity",
+      "remarks": "Reduce dose to one-third."
+    },
+    {
+      "precipitant_drug": "Allopurinol",
+      "object_drug": ["Warfarin", "Theophylline"],
+      "interaction": "Inhibits metabolism results in rise in levels",
+      "remarks": "Monitor & reduce dose."
+    },
+    {
+      "precipitant_drug": ["Carbenicillin", "Ticarcillin"],
+      "object_drug": ["Aspirin", "Other antiplatelets"],
+      "interaction": "Additive platelet inhibition results in bleeding risk",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Ceftriaxone", "Cefoperazone"],
+      "object_drug": "Warfarin",
+      "interaction": "Additive hypoprothrombinaemia results in bleeding",
+      "remarks": "Monitor INR; reduce dose."
+    },
+    {
+      "precipitant_drug": ["Sulfonamides", "Cotrimoxazole"],
+      "object_drug": "Phenytoin",
+      "interaction": "Displacement and metabolism decrease in results in toxicity",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Sulfonamides", "Cotrimoxazole"],
+      "object_drug": "Warfarin",
+      "interaction": "Displacement and metabolism decrease in and decrease in vit K results in bleeding",
+      "remarks": "Monitor INR; reduce dose."
+    },
+    {
+      "precipitant_drug": ["Sulfonamides", "Cotrimoxazole"],
+      "object_drug": "Sulfonylureas",
+      "interaction": "Displacement and metabolism decrease in results in hypoglycaemia",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Metronidazole", "Tinidazole", "Cefoperazone"],
+      "object_drug": "Alcohol",
+      "interaction": "Acetaldehyde build-up results in disulfiram-like reaction",
+      "remarks": "Advise no alcohol."
+    },
+    {
+      "precipitant_drug": ["Metronidazole", "Tinidazole"],
+      "object_drug": "Lithium salts",
+      "interaction": "decrease in Excretion results in lithium toxicity",
+      "remarks": "Monitor lithium; reduce dose."
+    },
+    {
+      "precipitant_drug": ["Metronidazole", "Tinidazole"],
+      "object_drug": "Warfarin",
+      "interaction": "Inhibits metabolism results in bleeding risk",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Ciprofloxacin", "Norfloxacin", "Pefloxacin"],
+      "object_drug": ["Theophylline", "Warfarin"],
+      "interaction": "Inhibits metabolism results in toxicity",
+      "remarks": "Monitor & reduce dose."
+    },
+    {
+      "precipitant_drug": ["Erythromycin", "Clarithromycin", "Ketoconazole", "Itraconazole", "Fluconazole", "Protease inhibitors"],
+      "object_drug": ["Phenytoin", "Carbamazepine", "Warfarin", "Sulfonylureas", "Diazepam", "Theophylline", "Cyclosporine", "HIV protease inhibitors"],
+      "interaction": "CYP3A4 inhibition results in object-drug toxicity",
+      "remarks": "Avoid or adjust dose."
+    },
+    {
+      "precipitant_drug": ["Erythromycin", "Clarithromycin", "Ketoconazole", "Itraconazole", "Fluconazole", "Protease inhibitors"],
+      "object_drug": "Statins",
+      "interaction": "rise in Statin levels results in myopathy risk",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Gemfibrozil", "Nicotinic acid"],
+      "object_drug": "Statins",
+      "interaction": "rise in Statin levels results in myopathy risk",
+      "remarks": "Lower statin dose; monitor for muscle pain."
+    },
+    {
+      "precipitant_drug": "Tetracyclines",
+      "object_drug": "Oral contraceptives",
+      "interaction": "Interrupts estrogen recycling results in contraceptive failure",
+      "remarks": "Use barrier contraception during and 7 days after."
+    },
+    {
+      "precipitant_drug": "Tetracyclines",
+      "object_drug": "Lithium salts",
+      "interaction": "decrease in Excretion results in lithium toxicity",
+      "remarks": "Monitor lithium; reduce dose."
+    },
+    {
+      "precipitant_drug": ["Iron salts", "Calcium salts", "Antacids", "Sucralfate"],
+      "object_drug": ["Tetracyclines", "Fluoroquinolones"],
+      "interaction": "Forms complexes results in decrease in antibiotic absorption",
+      "remarks": "Separate doses by 2–3 h."
+    },
+    {
+      "precipitant_drug": "Furosemide",
+      "object_drug": "Minocycline",
+      "interaction": "Enhanced vestibular toxicity",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": "Furosemide",
+      "object_drug": "Aminoglycosides",
+      "interaction": "Additive ototoxicity & nephrotoxicity",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": "Diuretics",
+      "object_drug": "Lithium",
+      "interaction": "decrease in Excretion results in lithium toxicity",
+      "remarks": "Monitor lithium; reduce dose."
+    },
+    {
+      "precipitant_drug": "Diuretics",
+      "object_drug": "Digoxin",
+      "interaction": "Hypokalaemia results in rise in digoxin toxicity",
+      "remarks": "Use K-sparing diuretic or supplement K⁺."
+    },
+    {
+      "precipitant_drug": ["Tetracyclines", "Chloramphenicol", "Macrolides"],
+      "object_drug": ["Penicillins", "Cephalosporins"],
+      "interaction": "Bacteriostatic antagonizes bactericidal",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": "Clindamycin",
+      "object_drug": ["Erythromycin", "Clarithromycin", "Azithromycin", "Chloramphenicol"],
+      "interaction": "Mutual antagonism at ribosome",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Phenobarbitone", "Phenytoin", "Carbamazepine", "Rifampin"],
+      "object_drug": ["Metronidazole", "Doxycycline", "Chloramphenicol", "Protease inhibitors", "Warfarin", "Corticosteroids", "Oral contraceptives", "Sulfonylureas", "Antidepressants"],
+      "interaction": "Enzyme induction results in decrease in object-drug efficacy",
+      "remarks": "Avoid or increase dose with monitoring."
+    },
+    {
+      "precipitant_drug": "Chloramphenicol",
+      "object_drug": ["Warfarin", "Phenytoin", "Sulfonylureas"],
+      "interaction": "Inhibits metabolism results in toxicity",
+      "remarks": "Avoid or monitor & reduce dose."
+    },
+    {
+      "precipitant_drug": "NSAIDs",
+      "object_drug": ["Ciprofloxacin", "Other fluoroquinolones"],
+      "interaction": "Enhanced CNS toxicity results in seizures",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Aspirin", "NSAIDs"],
+      "object_drug": ["Sulfonylureas", "Phenytoin", "Valproate", "Methotrexate", "Warfarin", "Heparin"],
+      "interaction": "Displacement/decrease in elimination results in toxicity",
+      "remarks": "Avoid or use paracetamol."
+    },
+    {
+      "precipitant_drug": ["Aspirin", "NSAIDs"],
+      "object_drug": ["ACE inhibitors", "β-blockers", "Thiazides", "Furosemide"],
+      "interaction": "decrease in Antihypertensive/diuretic effect",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Aspirin", "NSAIDs"],
+      "object_drug": ["Alcohol", "Corticosteroids"],
+      "interaction": "rise in Gastric damage & bleeding",
+      "remarks": "Contraindicated."
+    },
+    {
+      "precipitant_drug": "Aspirin",
+      "object_drug": "Spironolactone",
+      "interaction": "decrease in K⁺-sparing action",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": "Chronic alcoholism",
+      "object_drug": "Paracetamol",
+      "interaction": "decrease in Hepatotoxic threshold",
+      "remarks": "Limit dose to ≤3 g/day."
+    },
+    {
+      "precipitant_drug": ["Chlorpromazine", "Imipramine/Other TCAs"],
+      "object_drug": ["Morphine", "Pethidine", "Codeine"],
+      "interaction": "Additive CNS & respiratory depression",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Chlorpromazine", "Haloperidol", "Metoclopramide"],
+      "object_drug": "Levodopa-carbidopa",
+      "interaction": "Antagonizes antiparkinsonian effect",
+      "remarks": "Contraindicated."
+    },
+    {
+      "precipitant_drug": "Levodopa-carbidopa",
+      "object_drug": ["ACE inhibitors", "Vasodilators", "Prazosin"],
+      "interaction": "Excessive hypotension",
+      "remarks": "Reduce antihypertensive dose."
+    },
+    {
+      "precipitant_drug": "TCAs",
+      "object_drug": "Adrenaline",
+      "interaction": "rise in BP via uptake inhibition",
+      "remarks": "Use plain anaesthetic."
+    },
+    {
+      "precipitant_drug": "Promethazine",
+      "object_drug": ["Alcohol", "Opioids", "Antipsychotics", "Benzodiazepines"],
+      "interaction": "Additive CNS & respiratory depression",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": ["Cimetidine", "Isoniazid"],
+      "object_drug": "Benzodiazepines",
+      "interaction": "Inhibits metabolism results in rise in CNS depression",
+      "remarks": "Avoid or reduce benzodiazepine dose."
+    },
+    {
+      "precipitant_drug": ["Sildenafil", "Tadalafil"],
+      "object_drug": "Nitrates",
+      "interaction": "Severe hypotension",
+      "remarks": "Contraindicated."
+    },
+    {
+      "precipitant_drug": "Propranolol",
+      "object_drug": "Lidocaine",
+      "interaction": "decrease in Hepatic clearance",
+      "remarks": "Lower max local-anaesthetic dose."
+    },
+    {
+      "precipitant_drug": "Lidocaine",
+      "object_drug": "β-blockers",
+      "interaction": "Enhanced bradycardia & hypotension",
+      "remarks": "Avoid combination."
+    },
+    {
+      "precipitant_drug": "Lidocaine",
+      "object_drug": ["Quinidine", "Other antiarrhythmics"],
+      "interaction": "Exaggerated cardiac depression/arrhythmias",
+      "remarks": "Avoid combination."
+    }
+  ]
+  
+
