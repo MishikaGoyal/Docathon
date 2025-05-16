@@ -36,7 +36,7 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary" href="/auth/login">
+            <NavbarButton variant="secondary" href="/auth">
               Login
             </NavbarButton>
 
