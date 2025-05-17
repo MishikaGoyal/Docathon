@@ -1,4 +1,4 @@
-import AuthContainer from "./components/auth-containers";
+import AuthContainer from "@/components/auth/auth-containers";
 
 export default function Home() {
   return (

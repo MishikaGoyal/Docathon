@@ -40,7 +40,9 @@ export function NavbarDemo() {
               Login
             </NavbarButton>
 
-            <NavbarButton variant="primary">Register</NavbarButton>
+            <NavbarButton variant="primary" href="/auth">
+              Register
+            </NavbarButton>
           </div>
         </NavBody>
 

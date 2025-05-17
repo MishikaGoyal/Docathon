@@ -33,7 +33,7 @@ function page() {
             tools like drug interaction analysis, all designed to make
             healthcare more accessible and understandable for everyone.
           </p>
-          <NavbarButton variant="primary" className="mt-6">
+          <NavbarButton variant="primary" className="mt-6" href="/auth">
             Get Started
           </NavbarButton>
         </div>
