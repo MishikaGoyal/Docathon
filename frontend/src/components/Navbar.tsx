@@ -36,11 +36,13 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary" href="/auth/login">
+            <NavbarButton variant="secondary" href="/auth">
               Login
             </NavbarButton>
 
-            <NavbarButton variant="primary">Register</NavbarButton>
+            <NavbarButton variant="primary" href="/auth">
+              Register
+            </NavbarButton>
           </div>
         </NavBody>
 

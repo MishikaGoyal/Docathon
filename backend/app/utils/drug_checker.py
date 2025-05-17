@@ -4,7 +4,7 @@ import os
 
 # Load the JSON file here
 file_path = os.path.join(os.path.dirname(__file__), 'drug_interaction.json')
-with open(file_path) as f:
+with open(file_path, "r", encoding="utf-8") as f:
     interactions = json.load(f)
 
 def _check_pair(prev: str, new: str) -> Tuple[bool, str]:

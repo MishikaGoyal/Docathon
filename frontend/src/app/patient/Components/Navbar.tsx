@@ -34,7 +34,7 @@ export function NavbarDemo() {
     },
     {
       name: "Self Diagnosis",
-      link: "/patient/DrugInteraction",
+      link: "/patient/diagnosis",
     },
   ];
 
