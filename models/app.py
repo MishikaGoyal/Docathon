@@ -15,7 +15,6 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
-
     print("Incoming request to /transcribe")
  
     if 'audio' not in request.files:
@@ -34,8 +33,33 @@ def transcribe():
     print("File content type:", file.content_type)
     print("File MIME type:", file.mimetype)  
     result = transcribe_with_gladia(filepath)
-    print(result)
-    return jsonify(result)
+    print("Full API response:", result)  # Debugging - show full response
+    
+    if "error" in result:
+        return jsonify(result), 500
+
+    # Extract all transcriptions from the response
+    try:
+        # Case 1: If transcriptions are in a direct 'transcription' array
+        if "transcription" in result and isinstance(result["transcription"], list):
+            transcriptions = result["transcription"]
+        
+        # Case 2: If transcriptions are nested in predictions (common with Gladia)
+        elif "prediction" in result and isinstance(result["prediction"], list):
+            transcriptions = []
+            for prediction in result["prediction"]:
+                if "transcription" in prediction:
+                    transcriptions.append(prediction["transcription"])
+        
+        # Case 3: If the structure is different, add more conditions here
+        else:
+            return jsonify({"error": "Could not find transcription array in response"}), 500
+
+        return jsonify({"transcriptions": transcriptions})
+
+    except Exception as e:
+        print(f"Error parsing transcription response: {str(e)}")
+        return jsonify({"error": "Failed to parse transcriptions from API response"}), 500
 
 @app.route('/summarize', methods=['POST'])
 def summarize_pdf():
