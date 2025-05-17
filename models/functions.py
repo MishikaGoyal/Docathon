@@ -14,13 +14,24 @@ GLADIA_URL = os.getenv("GLADIA_URL")
 def transcribe_with_gladia(filepath):
     try:
         with open(filepath, 'rb') as f:
-            files = {'audio': f}
+            files = {
+    'audio': (
+        os.path.basename(filepath),
+        f,
+        'audio/mpeg'  # or use mimetypes.guess_type(filepath)[0]
+    )
+}
             headers = {
                 'accept': 'application/json',
                 'x-gladia-key': GLADIA_API_KEY
             }
+            data = {
+                'language': 'english',
+                'toggle_diarization': 'false',
+                'toggle_direct_translate': 'false'
+            }
             print("Sending file to Gladia API...")
-            response = requests.post(GLADIA_URL, headers=headers, files=files, timeout=60)
+            response = requests.post(GLADIA_URL, headers=headers, files=files,data=data, timeout=60)
             print("Received response from Gladia API")
 
         if response.status_code != 200:

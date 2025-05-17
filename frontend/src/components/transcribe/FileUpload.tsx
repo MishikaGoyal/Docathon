@@ -1,49 +1,61 @@
 "use client";
 import React, { useState } from "react";
 import { FileUpload } from "../ui/file-upload";
+import { jsPDF } from "jspdf";
 
 export default function FileUploadDemo() {
-  const [audioFile, setAudioFile] = useState<File | null>(null); // Renamed from image/file to audioFile
-  const [result, setResult] = useState<string>("");
+  const [audioFile, setAudioFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const handleFileChange = async (files: File[]) => {
     if (files.length === 0) return;
 
     const selectedFile = files[0];
-    const fileType = selectedFile.name.split(".").pop()?.toLowerCase();
 
-    // Validate file type (only allow MP3)
-    if (fileType !== "mp3") {
-      setResult("Error: Only MP3 files are supported.");
+    // Validate file type and size
+    if (
+      !selectedFile.type.includes("audio/") ||
+      !selectedFile.name.match(/\.(mp3|wav|ogg|m4a)$/i)
+    ) {
+      alert("Only audio files (.mp3, .wav, .ogg, .m4a) are supported");
       return;
     }
 
     setAudioFile(selectedFile);
     setIsUploading(true);
-
-    const formData = new FormData();
-    formData.append("audio", selectedFile); // Changed field name to "audio" for clarity
+    setPdfUrl(null);
 
     try {
-      const endpoint = "http://127.0.0.1:5000/transcribe"; // Update to your audio processing endpoint
+      const formData = new FormData();
+      formData.append("audio", selectedFile);
 
-      const res = await fetch(endpoint, {
+      const response = await fetch("http://127.0.0.1:5000/transcribe", {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) {
-        throw new Error(`Server error: ${res.status}`);
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
       }
 
-      const data = await res.json();
-      setResult(data.transcript || data.summary || "No response from server.");
+      if (!Array.isArray(data.transcriptions)) {
+        throw new Error("No transcription data returned from API");
+      }
+
+      // Generate PDF with each transcription on new line
+      const pdf = new jsPDF();
+      pdf.text(data.transcriptions, 10, 10);
+      const blob = pdf.output("blob");
+      const url = URL.createObjectURL(blob);
+      setPdfUrl(url);
     } catch (error) {
-      console.error("Upload failed", error);
-      setResult(
-        `Processing failed: ${
-          error instanceof Error ? error.message : String(error)
+      console.error("API Error:", error);
+      alert(
+        `Transcription failed: ${
+          error instanceof Error ? error.message : "Unknown error"
         }`
       );
     } finally {
@@ -53,7 +65,7 @@ export default function FileUploadDemo() {
 
   const handleReplaceFile = () => {
     setAudioFile(null);
-    setResult("");
+    setPdfUrl(null);
   };
 
   return (
@@ -87,7 +99,7 @@ export default function FileUploadDemo() {
             </button>
           </div>
 
-          {isUploading ? (
+          {isUploading && (
             <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
               <svg
                 className="animate-spin h-5 w-5 text-blue-500"
@@ -111,141 +123,19 @@ export default function FileUploadDemo() {
               </svg>
               <span>Processing...</span>
             </div>
-          ) : null}
-        </div>
-      )}
+          )}
 
-      {result && (
-        <div className="mt-8 w-full">
-          <div className="bg-white dark:bg-gray-850 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-            {/* Header */}
-            <div className="border-b-4 border-blue-600 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-6">
-              <div className="flex items-center">
-                <svg
-                  className="w-6 h-6 text-blue-600 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                  Document Analysis Summary
-                </h2>
-              </div>
+          {pdfUrl && (
+            <div className="mt-4">
+              <a
+                href={pdfUrl}
+                download="transcription.pdf"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Download PDF
+              </a>
             </div>
-
-            {/* Dynamic Content Parser */}
-            <div className="p-6 space-y-6">
-              {result.split(/\n{2,}/).map((section, sectionIndex) => {
-                // Clean the section first
-                const cleanedSection = section.trim();
-
-                // Check if section is a heading
-                const isHeading =
-                  cleanedSection.match(/^[A-Z][a-zA-Z ]+:/) ||
-                  cleanedSection.match(/^[#*]{1,2}\s/) ||
-                  cleanedSection.match(/^[A-Z ]+$/);
-
-                // Check for bold text patterns
-                const isBoldHeading = cleanedSection.match(/\*\*.+\*\*/);
-
-                if (isHeading || isBoldHeading) {
-                  // Clean heading text
-                  const headingText = cleanedSection
-                    .replace(/\*\*/g, "")
-                    .replace(/#/g, "")
-                    .trim();
-
-                  return (
-                    <div key={`heading-${sectionIndex}`} className="space-y-3">
-                      <div className="flex items-center">
-                        <div
-                          className={`w-1.5 h-6 ${
-                            sectionIndex % 3 === 0
-                              ? "bg-blue-600"
-                              : sectionIndex % 3 === 1
-                              ? "bg-green-600"
-                              : "bg-purple-600"
-                          } rounded-full mr-3`}
-                        ></div>
-                        <h3
-                          className={`text-lg font-bold ${
-                            sectionIndex % 3 === 0
-                              ? "text-blue-700 dark:text-blue-400"
-                              : sectionIndex % 3 === 1
-                              ? "text-green-700 dark:text-green-400"
-                              : "text-purple-700 dark:text-purple-400"
-                          }`}
-                        >
-                          {headingText}
-                        </h3>
-                      </div>
-                    </div>
-                  );
-                }
-
-                // Process bullet points that start with *
-                if (
-                  cleanedSection.includes("* ") &&
-                  cleanedSection.split("\n").length === 1
-                ) {
-                  return (
-                    <ul
-                      key={`bullets-${sectionIndex}`}
-                      className="pl-6 space-y-3"
-                    >
-                      {cleanedSection
-                        .split("* ")
-                        .filter((item) => item.trim())
-                        .map((item, itemIndex) => (
-                          <li
-                            key={`bullet-${itemIndex}`}
-                            className="text-gray-700 dark:text-gray-300 leading-relaxed"
-                          >
-                            <span className="absolute -ml-4">•</span>
-                            {item.trim()}
-                          </li>
-                        ))}
-                    </ul>
-                  );
-                }
-
-                // Process regular lists (with line breaks)
-                if (cleanedSection.match(/^\s*[-*•]\s|\d+\.\s/)) {
-                  return (
-                    <ul key={`list-${sectionIndex}`} className="pl-6 space-y-3">
-                      {cleanedSection.split("\n").map((item, itemIndex) => (
-                        <li
-                          key={`listitem-${itemIndex}`}
-                          className="text-gray-700 dark:text-gray-300 leading-relaxed"
-                        >
-                          <span className="absolute -ml-4">•</span>
-                          {item.replace(/^\s*[-*•]\s|\d+\.\s/, "").trim()}
-                        </li>
-                      ))}
-                    </ul>
-                  );
-                }
-
-                // Regular paragraph
-                return (
-                  <div key={`para-${sectionIndex}`} className="pl-6">
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-                      {cleanedSection}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Footer */}
-          </div>
+          )}
         </div>
       )}
     </div>
