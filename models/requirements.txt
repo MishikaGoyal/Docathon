@@ -11,3 +11,4 @@ python-decouple
 pydub
 torch
 transformers
+tensorflow
