@@ -3,18 +3,34 @@ from dotenv import load_dotenv, find_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import google.generativeai as genai
-from apps import whisper
-from apps import genai2
+import requests
+
 
 load_dotenv(find_dotenv())
 
-def process_audio(audio_path: str) -> str:
-    chunks = whisper.split_audio(audio_path)
-    print("Transcribing audio...")
-    transcript = whisper.transcribe_chunks(chunks)
-    print("Summarizing transcript...")
-    summary = genai2.summarize_large_transcript(transcript)
-    return summary
+GLADIA_API_KEY = os.getenv("GLADIA_API_KEY")
+GLADIA_URL = os.getenv("GLADIA_URL")
+
+def transcribe_with_gladia(filepath):
+    try:
+        with open(filepath, 'rb') as f:
+            files = {'audio': f}
+            headers = {
+                'accept': 'application/json',
+                'x-gladia-key': GLADIA_API_KEY
+            }
+            print("Sending file to Gladia API...")
+            response = requests.post(GLADIA_URL, headers=headers, files=files, timeout=60)
+            print("Received response from Gladia API")
+
+        if response.status_code != 200:
+            return {"error": "API call failed", "details": response.text}
+
+        return response.json()
+
+    finally:
+        if os.path.exists(filepath):
+            os.remove(filepath) 
 
 def process_pdf(filepath: str):
     loader = PyPDFLoader(filepath)
