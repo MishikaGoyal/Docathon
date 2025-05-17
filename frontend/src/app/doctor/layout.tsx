@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { NavbarDemo } from "@/components/patient/Navbar";
+import { NavbarDemo } from "@/components/doctor/DocNav";
 
 export const metadata: Metadata = {
   title: "Doctor Page",

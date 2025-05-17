@@ -1,7 +1,7 @@
 import { FeaturesSectionDemo } from "@/components/Feature";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import { NavbarDemo } from "@/app/patient/Components/Navbar";
+import { NavbarDemo } from "@/components/patient/Navbar";
 import Image from "next/image";
 
 export default function PatientDashboard() {
