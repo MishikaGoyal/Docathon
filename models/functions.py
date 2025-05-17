@@ -4,6 +4,9 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import google.generativeai as genai
 import requests
+import numpy as np
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
 
 
 load_dotenv(find_dotenv())
@@ -57,3 +60,19 @@ def summarize_with_gemini(text: str):
     ''')
     response = model.generate_content(prompt)
     return response.text
+
+MODEL_PATH = "breast_cancer_classifier.h5"
+model = load_model(MODEL_PATH)
+ 
+class_names = ['Non-Cancerous', 'Cancerous']
+
+def predict_image(img_path):
+    img = image.load_img(img_path, target_size=(224, 224)) 
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0 
+
+    prediction = model.predict(img_array)[0]
+    predicted_class = class_names[np.argmax(prediction)]
+
+    return predicted_class, float(np.max(prediction))

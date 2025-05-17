@@ -61,5 +61,28 @@ def summarize_pdf():
     else:
         return jsonify({"error": "Invalid file type. Please upload a PDF."}), 400
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'image' not in request.files:
+        return jsonify({"error": "No image file in the request"}), 400
+
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({"error": "No selected image file"}), 400
+
+    if not file.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
+        return jsonify({"error": "Only .jpg, .jpeg, or .png files are supported"}), 400
+
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(filepath)
+
+    try:
+        result, confidence = predict_image(filepath)
+        print("Confidence:", confidence)
+        return jsonify({"prediction": result})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
