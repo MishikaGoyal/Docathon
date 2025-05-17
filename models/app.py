@@ -33,7 +33,6 @@ def transcribe():
     file.save(filepath)
     print("File content type:", file.content_type)
     print("File MIME type:", file.mimetype)  
-
     result = transcribe_with_gladia(filepath)
     print(result)
     return jsonify(result)
