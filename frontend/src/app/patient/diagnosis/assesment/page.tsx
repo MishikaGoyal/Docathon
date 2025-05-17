@@ -222,7 +222,10 @@ export default function AssessmentPage() {
       },
       {
         id: "shape",
-        question: "Are you experiencing orange shaped breast",
+        question:
+          "Does your breast appear like an orange peel, like the image shown below",
+        imageUrl:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ44zUk4Lg2V3P4CRM9v-dteyJXHVEsFKzABg&s",
         options: [
           { value: "yes", label: "Yes" },
           { value: "no", label: "No" },
@@ -291,6 +294,14 @@ export default function AssessmentPage() {
                 <Label htmlFor={q.id} className="text-base">
                   {q.question}
                 </Label>
+                {q.imageUrl && (
+                  <img
+                    src={q.imageUrl}
+                    alt="Question visual"
+                    className="w-full max-w-md rounded-lg border shadow-sm"
+                  />
+                )}
+
                 <RadioGroup
                   id={q.id}
                   value={answers[q.id as AnswerKey]}
