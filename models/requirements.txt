@@ -1,3 +1,4 @@
+flask
 langchain
 langchain-community
 google-generativeai
@@ -5,4 +6,8 @@ python-dotenv
 ipykernel
 streamlit
 requests
-pyPDF
+PyPDF2
+python-decouple
+pydub
+torch
+transformers

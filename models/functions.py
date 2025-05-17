@@ -3,8 +3,18 @@ from dotenv import load_dotenv, find_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import google.generativeai as genai
+from apps import whisper
+from apps import genai2
 
 load_dotenv(find_dotenv())
+
+def process_audio(audio_path: str) -> str:
+    chunks = whisper.split_audio(audio_path)
+    print("Transcribing audio...")
+    transcript = whisper.transcribe_chunks(chunks)
+    print("Summarizing transcript...")
+    summary = genai2.summarize_large_transcript(transcript)
+    return summary
 
 def process_pdf(filepath: str):
     loader = PyPDFLoader(filepath)
