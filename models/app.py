@@ -2,44 +2,41 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import os
 from flask_cors import CORS
-from functions import process_pdf, summarize_with_gemini, process_audio
+from functions import process_pdf, summarize_with_gemini, transcribe_with_gladia, predict_image
 import uuid
 
 app = Flask(__name__)
 CORS(app)
 
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "3"
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB limit
 
-UPLOAD_FOLDER_AUDIO = 'uploads/audio'
-UPLOAD_FOLDER_PDF = 'uploads/pdf'
-MAX_UPLOAD_SIZE_MB = 100
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_SIZE_MB * 1024 * 1024  # 100 MB max
+@app.route('/transcribe', methods=['POST'])
+def transcribe():
 
-os.makedirs(UPLOAD_FOLDER_AUDIO, exist_ok=True)
-os.makedirs(UPLOAD_FOLDER_PDF, exist_ok=True)
+    print("Incoming request to /transcribe")
+ 
+    if 'audio' not in request.files:
+        return jsonify({"error": "No audio file part in the request"}), 400
 
-@app.route("/transcribe", methods=["POST"])
-def transcribe_and_summarize():
-    if "file" not in request.files:
-        return jsonify({"error": "No file part in the request"}), 400
-
-    file = request.files["file"]
-    if file.filename == "":
+    file = request.files['audio']
+    if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
-    try:
-        filename = secure_filename(file.filename)
-        unique_name = f"{uuid.uuid4()}_{filename}"
-        audio_path = os.path.join(UPLOAD_FOLDER_AUDIO, unique_name)
-        file.save(audio_path)
-        print(f"Saved file to {audio_path}")
-        summary = process_audio(audio_path)
-        return jsonify({"summary": summary})
+    if not file.filename.lower().endswith('.mp3'):
+        return jsonify({"error": "Only .mp3 files are supported"}), 400
 
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(filepath)
+    print("File content type:", file.content_type)
+    print("File MIME type:", file.mimetype)  
+
+    result = transcribe_with_gladia(filepath)
+    print(result)
+    return jsonify(result)
 
 @app.route('/summarize', methods=['POST'])
 def summarize_pdf():
@@ -52,7 +49,7 @@ def summarize_pdf():
     
     if file and file.filename.endswith('.pdf'):
         filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER_PDF'], filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
         try:
