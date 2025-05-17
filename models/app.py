@@ -8,18 +8,15 @@ import uuid
 app = Flask(__name__)
 CORS(app)
 
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "3"
+'''os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"'''
 
-UPLOAD_FOLDER_AUDIO = 'uploads/audio'
-UPLOAD_FOLDER_PDF = 'uploads/pdf'
-MAX_UPLOAD_SIZE_MB = 100
+app.config['UPLOAD_FOLDER'] = 'uploads'
 
-app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_SIZE_MB * 1024 * 1024  # 100 MB max
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB limit
 
-os.makedirs(UPLOAD_FOLDER_AUDIO, exist_ok=True)
-os.makedirs(UPLOAD_FOLDER_PDF, exist_ok=True)
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-@app.route("/transcribe", methods=["POST"])
+'''@app.route("/transcribe", methods=["POST"])
 def transcribe_and_summarize():
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
@@ -31,7 +28,7 @@ def transcribe_and_summarize():
     try:
         filename = secure_filename(file.filename)
         unique_name = f"{uuid.uuid4()}_{filename}"
-        audio_path = os.path.join(UPLOAD_FOLDER_AUDIO, unique_name)
+        audio_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_name)
         file.save(audio_path)
         print(f"Saved file to {audio_path}")
         summary = process_audio(audio_path)
@@ -39,7 +36,7 @@ def transcribe_and_summarize():
 
     except Exception as e:
         print(f"Error: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 500'''
 
 @app.route('/summarize', methods=['POST'])
 def summarize_pdf():
@@ -52,7 +49,7 @@ def summarize_pdf():
     
     if file and file.filename.endswith('.pdf'):
         filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER_PDF'], filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
         try:
