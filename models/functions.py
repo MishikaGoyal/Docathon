@@ -16,13 +16,10 @@ GLADIA_URL = os.getenv("GLADIA_URL")
 def transcribe_with_gladia(filepath):
     try:
         with open(filepath, 'rb') as f:
-            files = {
-    'audio': (
-        os.path.basename(filepath),
-        f,
-        'audio/mpeg'  # or use mimetypes.guess_type(filepath)[0]
-    )
-}
+            files = {'audio': (
+                    os.path.basename(filepath), f,
+                    'audio/mpeg'
+                )}
             headers = {
                 'accept': 'application/json',
                 'x-gladia-key': GLADIA_API_KEY

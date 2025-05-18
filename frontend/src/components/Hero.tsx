@@ -4,7 +4,7 @@ import { NavbarButton } from "./ui/resizable-navbar";
 function Hero() {
   return (
     <div className="">
-      <div className=" flex ml-32 mt-16 ">
+      <div className=" flex ml-8 mt-16 ">
         <Image
           src="/main.gif"
           width={600}
@@ -14,9 +14,9 @@ function Hero() {
         />
 
         <div>
-          <p className="text-lg w-xl mt-28 ml-2 mr-4">
+          <p className="text-lg w-xl mt-28 ml-2 mr-16">
             <span className="text-2xl font-bold mb-3">Get started </span>
-            <br></br>where technology meets healthcare—empowering you to
+            <br></br> Where technology meets healthcare—empowering you to
             understand medical terms, confidently navigate consent forms, and
             detect conditions like breast cancer early. From transcribing
             doctor-patient conversations to simplifying complex medical

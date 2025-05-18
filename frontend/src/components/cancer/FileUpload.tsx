@@ -125,7 +125,7 @@ export default function FileUploadDemo() {
                   />
                 </svg>
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                  Document Analysis Summary
+                  Detection Result
                 </h2>
               </div>
             </div>

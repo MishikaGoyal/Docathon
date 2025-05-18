@@ -5,7 +5,7 @@ function Footer() {
   return (
     <div>
       <footer className="border-t border-slate-200 bg-#fdf6f6 py-12 ">
-        <div className="container ml-8">
+        <div className="container ml-6">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-2 ">
