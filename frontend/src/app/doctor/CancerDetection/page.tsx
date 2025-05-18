@@ -8,14 +8,14 @@ function page() {
     <div>
       <div className="flex gap-6 mt-6">
         <img
-          src="https://i.pinimg.com/originals/69/18/2d/69182d6b99b01ef12321803cfb30ab57.gif"
+          src="https://i.pinimg.com/736x/de/3b/13/de3b1385a2e8253be8ff62127697de59.jpg"
           alt=""
           className="mt-12 ml-6 rounded-xl"
         />
         <div>
           <p className="mt-24 mb-6 ">
-            Transcribe your conversation now, transcribe now get summary for
-            future reference
+            Detect Breast Cancer with the help of AI that provides fast and easy
+            results.
           </p>
           <FileUploadDemo />
         </div>

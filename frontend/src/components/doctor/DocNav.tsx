@@ -21,7 +21,7 @@ export function NavbarDemo() {
 
     {
       name: "Cancer Treatment",
-      link: "#contact",
+      link: "/doctor/cancerDetection",
     },
     {
       name: "Drug Interaction",

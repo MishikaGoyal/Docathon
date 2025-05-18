@@ -11,12 +11,19 @@ export default function FileUploadDemo() {
   const handleImageChange = async (files: File[]) => {
     if (files.length === 0) return;
 
-    const pdfFile = files[0];
-    setImage(pdfFile);
+    const selectedFile = files[0];
+    if (
+      !selectedFile.type.includes("image/") ||
+      !selectedFile.name.match(/\.(jpeg|jpg|png)$/i)
+    ) {
+      alert("Only audio files (.mp3, .wav, .ogg, .m4a) are supported");
+      return;
+    }
+    setImage(selectedFile);
     setIsUploading(true);
 
     const formData = new FormData();
-    formData.append("file", pdfFile);
+    formData.append("image", selectedFile);
 
     try {
       const res = await fetch("http://127.0.0.1:5000/predict", {
@@ -25,7 +32,7 @@ export default function FileUploadDemo() {
       });
 
       const data = await res.json();
-      setResult(data.summary || "No response from model.");
+      setResult(data.prediction || "No response from model.");
     } catch (error) {
       console.error("Upload failed", error);
       setResult("Prediction failed.");
