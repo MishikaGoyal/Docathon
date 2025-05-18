@@ -20,7 +20,7 @@ export function NavbarDemo() {
     },
 
     {
-      name: "Cancer Treatment",
+      name: "Cancer Detection",
       link: "/doctor/CancerDetection",
     },
     {

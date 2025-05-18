@@ -77,7 +77,7 @@ export default function FileUploadDemo() {
           <div className="flex items-center space-x-4">
             <div className="flex items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
               <svg
-                className="w-6 h-6 text-blue-500 mr-2"
+                className="w-6 h-6 text-black mr-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

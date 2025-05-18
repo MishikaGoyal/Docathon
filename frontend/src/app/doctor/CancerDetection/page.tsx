@@ -8,7 +8,7 @@ function page() {
     <div>
       <div className="flex gap-6 mt-6">
         <img
-          src="https://i.pinimg.com/736x/de/3b/13/de3b1385a2e8253be8ff62127697de59.jpg"
+          src="https://i.pinimg.com/736x/9b/bd/81/9bbd81f0ecd3b6a6dd1c7cd6e72ae858.jpg"
           alt=""
           className="mt-12 ml-6 rounded-xl"
         />
