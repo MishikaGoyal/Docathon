@@ -4,6 +4,7 @@ from app.database import db
 from datetime import datetime
 from typing import List
 from app.utils import drug_checker
+from bson import ObjectId
 
 class DiseaseModel(BaseModel):
     disease_name: str
@@ -27,17 +28,27 @@ class PatientMedicalRecord(BaseModel):
 
 drugs_router = APIRouter()
 
+def convert_object_ids(document):
+    """Recursively convert ObjectIds in a MongoDB document to strings."""
+    if isinstance(document, dict):
+        return {k: convert_object_ids(v) for k, v in document.items()}
+    elif isinstance(document, list):
+        return [convert_object_ids(item) for item in document]
+    elif isinstance(document, ObjectId):
+        return str(document)
+    else:
+        return document
+
 @drugs_router.post("/doctor/add-medical-record")
 async def add_medical_record(new_record: MedicalRecord):
+    print("new record recienved is", new_record)
     user_id = new_record.user_id
     disease_key = new_record.disease.disease_name.lower()
 
-    # 1. Verify patient exists
     patient = await db["patients"].find_one({"email": user_id})
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
 
-    # 2. Fetch or create medical record
     existing = await db["medical_records"].find_one({"user_id": user_id})
     if not existing:
         await db["medical_records"].insert_one({
@@ -51,7 +62,6 @@ async def add_medical_record(new_record: MedicalRecord):
         })
         return {"status": "added", "message": "New medical record created"}
 
-    # 3. Gather all active drugs across all diseases
     prev_drugs = [
         d["drug_name"]
         for rec in existing["records"]
@@ -60,7 +70,6 @@ async def add_medical_record(new_record: MedicalRecord):
     ]
     new_drugs = [d.drug_name for d in new_record.prescribed_drugs]
 
-    # 4. Check for drug interactions
     results = drug_checker.check_interactions(prev_drugs, new_drugs)
     conflicts = [r for r in results if r["conflict"] == "True"]
     if conflicts:
@@ -69,7 +78,7 @@ async def add_medical_record(new_record: MedicalRecord):
             "conflicts": conflicts
         }
 
-    # 5. Check if the disease exists in record
+    #. Check if the disease exists in record
     for idx, rec in enumerate(existing["records"]):
         if rec["disease"]["disease_name"].lower() == disease_key:
             # Check for duplicate drug names (active)
@@ -103,7 +112,7 @@ async def add_medical_record(new_record: MedicalRecord):
                 "message": f"Added drugs to existing disease '{disease_key}'"
             }
 
-    # 6. If disease does not exist, add it
+    # . If disease does not exist, add it
     new_rec = {
         "disease": new_record.disease.model_dump(),
         "prescribed_drugs": [d.model_dump() for d in new_record.prescribed_drugs]
@@ -118,14 +127,18 @@ async def add_medical_record(new_record: MedicalRecord):
     }
 
 
-@drugs_router.get("/get-medical-records")
-async def get_medic_records(record_userid: PatientMedicalRecord):
-    records = await db["medical_records"].find_one({"user_id": record_userid.user_id})
+@drugs_router.post("/get-medical-records")
+async def get_medic_records(patient: PatientMedicalRecord):
+    record_userid = patient.user_id
+    records = await db["medical_records"].find_one({"user_id": record_userid})
 
     if not records:
         raise HTTPException(status_code=404, detail="Medical records not found")
 
+    converted_record = convert_object_ids(records)
+
     return {
-        "patient_data": records,
-        "message": f"Found medical record for patient '{record_userid.user_id}'"
+        "patient_data": converted_record,
+        "message": f"Found medical record for patient {record_userid}"
     }
+

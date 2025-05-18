@@ -25,7 +25,7 @@ export function NavbarDemo() {
     },
     {
       name: "Drug Interaction",
-      link: "/doctor/druginteraction",
+      link: "/doctor/drug-interaction",
     },
   ];
 
