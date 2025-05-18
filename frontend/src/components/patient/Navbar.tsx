@@ -30,7 +30,7 @@ export function NavbarDemo() {
     },
 
     {
-      name: "Self Diagnosis",
+      name: "Self Assesment",
       link: "/patient/diagnosis",
     },
   ];

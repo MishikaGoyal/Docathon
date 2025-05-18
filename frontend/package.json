@@ -29,6 +29,7 @@
     "cobe": "^0.6.3",
     "date-fns": "^3.6.0",
     "framer-motion": "^12.10.5",
+    "i18next": "^25.1.3",
     "icons-react": "^3.7.1",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.509.0",
@@ -39,6 +40,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
+    "react-i18next": "^15.5.1",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0"
   },

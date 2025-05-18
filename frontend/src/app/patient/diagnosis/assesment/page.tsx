@@ -4,15 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n"; // Adjust if your i18n.ts is in a different folder
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
@@ -33,6 +29,7 @@ type Answers = Record<AnswerKey, string>;
 
 export default function AssessmentPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Answers>({
     age: "",
@@ -55,18 +52,13 @@ export default function AssessmentPage() {
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
 
-    // Calculate risk score
     let newScore = 0;
-
-    // High risk factors (2 points each)
     if (newAnswers.hasLump === "yes") newScore += 2;
     if (newAnswers.lumpHardness === "yes") newScore += 2;
     if (newAnswers.lumpSurface === "yes") newScore += 2;
     if (newAnswers.lumpSizeChange === "yes") newScore += 2;
     if (newAnswers.sizeIncreaseRate === "rapid") newScore += 1;
     if (newAnswers.sizeIncreaseRate === "slow") newScore += 2;
-
-    // Moderate risk factors (1 point each)
     if (newAnswers.neckNodules === "yes") newScore += 1;
     if (newAnswers.weightLoss === "yes") newScore += 1;
     if (newAnswers.decreasedAppetite === "yes") newScore += 1;
@@ -79,11 +71,12 @@ export default function AssessmentPage() {
     if (step < totalSteps) {
       setStep(step + 1);
     } else {
-      // Navigation based on risk score
       if (riskScore >= 5) {
         router.push("/patient/diagnosis/assesment/detailed-result");
       } else if (riskScore >= 3) {
         router.push("/patient/diagnosis/assesment/results");
+      } else {
+        router.push("/patient/diagnosis/assesment/safe");
       }
     }
   };
@@ -93,10 +86,7 @@ export default function AssessmentPage() {
   };
 
   const shouldShowQuestion = (questionId: AnswerKey): boolean => {
-    // Always show age question
     if (questionId === "age") return true;
-
-    // Show general questions to everyone in step 2
     if (
       step === 2 &&
       ["neckNodules", "weightLoss", "decreasedAppetite", "shape"].includes(
@@ -105,8 +95,6 @@ export default function AssessmentPage() {
     ) {
       return true;
     }
-
-    // Lump-related questions conditional flow
     if (questionId === "hasLump") return step === 1;
     if (questionId === "lumpHardness")
       return answers.hasLump === "yes" && step === 1;
@@ -116,12 +104,10 @@ export default function AssessmentPage() {
       return answers.lumpSurface === "yes" && step === 1;
     if (questionId === "sizeIncreaseRate")
       return answers.lumpSizeChange === "yes" && step === 1;
-
     return false;
   };
 
   const isStepComplete = () => {
-    // Step 1 completion (lump-related questions)
     if (step === 1) {
       if (answers.hasLump === "no") return true;
       if (answers.hasLump === "yes" && !answers.lumpHardness) return false;
@@ -132,8 +118,6 @@ export default function AssessmentPage() {
         return false;
       return true;
     }
-
-    // Step 2 completion (general questions)
     if (step === 2) {
       return (
         answers.neckNodules &&
@@ -142,7 +126,6 @@ export default function AssessmentPage() {
         answers.shape
       );
     }
-
     return true;
   };
 
@@ -150,111 +133,81 @@ export default function AssessmentPage() {
     const allQuestions = [
       {
         id: "hasLump",
-        question: "Have you noticed a lump in your breast?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
-        isCritical: true,
+        imageUrl: "",
+        options: ["yes", "no"],
       },
       {
         id: "lumpHardness",
-        question: "Is the lump stony hard?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
-        dependsOn: { id: "hasLump", value: "yes" },
+        imageUrl: "",
+        options: ["yes", "no"],
       },
       {
         id: "lumpSurface",
-        question: "Is the surface of the lump irregular?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
-        dependsOn: { id: "lumpHardness", value: "yes" },
+        imageUrl: "",
+        options: ["yes", "no"],
       },
       {
         id: "lumpSizeChange",
-        question: "Has the lump increased in size in the past month?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
-        dependsOn: { id: "lumpSurface", value: "yes" },
+        imageUrl: "",
+        options: ["yes", "no"],
       },
       {
         id: "sizeIncreaseRate",
-        question: "How fast has the size increased?",
-        options: [
-          { value: "rapid", label: "Rapidly (within weeks)" },
-          { value: "slow", label: "Slowly (over months)" },
-        ],
-        dependsOn: { id: "lumpSizeChange", value: "yes" },
+        imageUrl: "",
+        options: ["rapid", "slow"],
       },
       {
         id: "neckNodules",
-        question: "Have you noticed any nodules in your neck?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
+        imageUrl: "",
+        options: ["yes", "no"],
         step: 2,
       },
       {
         id: "weightLoss",
-        question: "Have you experienced unexplained weight loss?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
+        imageUrl: "",
+        options: ["yes", "no"],
         step: 2,
       },
       {
         id: "decreasedAppetite",
-        question: "Are you experiencing decreased appetite?",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
+        imageUrl: "",
+        options: ["yes", "no"],
         step: 2,
       },
       {
         id: "shape",
-        question:
-          "Does your breast appear like an orange peel, like the image shown below",
-        imageUrl:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ44zUk4Lg2V3P4CRM9v-dteyJXHVEsFKzABg&s",
-        options: [
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
+        imageUrl: "https://i.ytimg.com/vi/G0TKXaOXrik/sddefault.jpg",
+        options: ["yes", "no"],
         step: 2,
       },
     ];
 
     return allQuestions.filter((q) => {
-      // Show questions for current step
       if (q.step && q.step !== step) return false;
-
-      // Handle conditional questions
-      if (q.dependsOn) {
-        return answers[q.dependsOn.id as AnswerKey] === q.dependsOn.value;
-      }
-
       return shouldShowQuestion(q.id as AnswerKey);
     });
   };
 
   return (
     <div className="container mx-auto max-w-4xl py-8 px-4">
+      <div className="flex justify-end mb-4">
+        <select
+          value={i18n.language}
+          onChange={(e) => i18n.changeLanguage(e.target.value)}
+          className="rounded border px-2 py-1 text-sm text-pink-700"
+        >
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="kn">ಕನ್ನಡ</option>
+        </select>
+      </div>
+
       <div className="mb-8 space-y-4">
         <h1 className="text-center text-3xl font-bold text-pink-700">
-          Breast Cancer Risk Assessment
+          {t("assessment.title")}
         </h1>
         <p className="text-center text-muted-foreground">
-          Please answer all questions to get an accurate risk assessment.
+          {t("assessment.description")}
         </p>
         <div className="mx-auto w-full max-w-md">
           <Progress value={progress} className="h-2 bg-pink-100" />
@@ -276,23 +229,15 @@ export default function AssessmentPage() {
         <Card className="border-pink-100 shadow-lg">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-pink-700">
-              {step === 1 && "Breast Lump Assessment"}
-              {step === 2 && "General Symptoms"}
-              {step === 3 && "Review Your Answers"}
+              {t(`assessment.steps.${step}`)}
             </CardTitle>
-            <CardDescription>
-              {step === 1 && "Tell us about any breast lumps you've noticed"}
-              {step === 2 &&
-                "Help us understand other symptoms you're experiencing"}
-              {step === 3 && "Confirm your information before submitting"}
-            </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6">
             {getCurrentQuestions().map((q) => (
               <div key={q.id} className="space-y-3">
                 <Label htmlFor={q.id} className="text-base">
-                  {q.question}
+                  {t(`assessment.questions.${q.id}`)}
                 </Label>
                 {q.imageUrl && (
                   <img
@@ -310,24 +255,21 @@ export default function AssessmentPage() {
                   }
                   className="grid grid-cols-1 gap-3 md:grid-cols-2"
                 >
-                  {q.options.map((option) => (
+                  {q.options.map((value) => (
                     <div
-                      key={option.value}
+                      key={value}
                       className={`flex items-center space-x-2 rounded-md border p-3 transition-colors ${
-                        answers[q.id as AnswerKey] === option.value
+                        answers[q.id as AnswerKey] === value
                           ? "border-pink-300 bg-pink-50"
                           : "hover:bg-muted"
                       }`}
                     >
-                      <RadioGroupItem
-                        value={option.value}
-                        id={`${q.id}-${option.value}`}
-                      />
+                      <RadioGroupItem value={value} id={`${q.id}-${value}`} />
                       <Label
-                        htmlFor={`${q.id}-${option.value}`}
+                        htmlFor={`${q.id}-${value}`}
                         className="flex-1 cursor-pointer"
                       >
-                        {option.label}
+                        {t(`assessment.options.${value}`)}
                       </Label>
                     </div>
                   ))}

@@ -68,6 +68,7 @@ export default function FileUploadDemo() {
                 />
               </svg>
               <span className="text-sm font-medium">{image.name}</span>
+              {image && <img src={image} alt="Uploaded Preview" />}
             </div>
             <button
               onClick={handleReplaceFile}

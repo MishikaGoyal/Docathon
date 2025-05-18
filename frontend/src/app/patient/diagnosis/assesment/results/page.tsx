@@ -33,7 +33,7 @@ export default function ResultsPage() {
               <CheckCircle className="h-8 w-8 text-green-600" />
             </motion.div>
             <CardTitle className="text-2xl font-bold text-green-700">
-              Low Risk Assessment
+              Everything Seems Good
             </CardTitle>
             <CardDescription className="text-base">
               Based on your responses, you appear to have a lower risk profile

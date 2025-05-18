@@ -1,0 +1,28 @@
+{
+  "assessment": {
+    "title": "Breast Cancer Risk Assessment",
+    "description": "Please answer all questions to get an accurate risk assessment.",
+    "steps": {
+      "1": "Breast Lump Assessment",
+      "2": "General Symptoms",
+      "3": "Review Your Answers"
+    },
+    "questions": {
+      "hasLump": "Have you noticed a lump in your breast?",
+      "lumpHardness": "Is the lump stony hard?",
+      "lumpSurface": "Is the surface of the lump irregular?",
+      "lumpSizeChange": "Has the lump increased in size in the past month?",
+      "sizeIncreaseRate": "How fast has the size increased?",
+      "neckNodules": "Have you noticed any nodules in your neck?",
+      "weightLoss": "Have you experienced unexplained weight loss?",
+      "decreasedAppetite": "Are you experiencing decreased appetite?",
+      "shape": "Does your breast appear like an orange peel, like the image shown below"
+    },
+    "options": {
+      "yes": "Yes",
+      "no": "No",
+      "rapid": "Rapidly (within weeks)",
+      "slow": "Slowly (over months)"
+    }
+  }
+}
