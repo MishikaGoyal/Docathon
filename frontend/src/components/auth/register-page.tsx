@@ -1,50 +1,117 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/auth/toggle-group";
 import { UserRound, Briefcase } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
+  const router = useRouter()
   const [role, setRole] = useState("user");
+  const  [loading , setIsloading] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    gender: "",
+    dob: "",
+    speciality: "",
+    department: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleSelectChange = (key: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+  
+    const apiUrl =
+      role === "user"
+        ? "http://localhost:8000/patient/register"
+        : "http://localhost:8000/doctor/register";
+  
+    const payload =
+      role === "user"
+        ? {
+            name: formData.name,
+            email: formData.email,
+            gender: formData.gender,
+            password: formData.password,
+            dob: new Date(formData.dob).toISOString(),
+          }
+        : {
+            name: formData.name,
+            email: formData.email,
+            gender: formData.gender,
+            password: formData.password,
+            speciality: formData.speciality,
+            department: formData.department,
+          };
+  
+    try {
+      setIsloading(true)
+      const response = await axios.post(apiUrl, payload, {
+        withCredentials: true, 
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if(response.data){
+        if (role == "user"){
+          setIsloading(false)
+          router.push("/patient/dashboard")
+        }else {
+          setIsloading(false)
+          router.push("/doctor/dashboard")
+        }
+      }
+  
+    } catch (error: any) {
+      const errMsg =
+        error.response?.data?.detail || error.message || "Registration failed";
+      alert(errMsg);
+    }
+  };
 
   return (
     <div className="space-y-6">
-      {/* Role Selection */}
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-4">
         <Label className="block">Select your role</Label>
         <div className="flex justify-center">
           <ToggleGroup
             type="single"
             value={role}
-            onValueChange={(value: SetStateAction<string>) =>
-              value && setRole(value)
-            }
+            onValueChange={(value) => value && setRole(value)}
           >
-            <ToggleGroupItem
-              value="user"
-              aria-label="User"
-              className="flex flex-col items-center gap-1 px-6 py-2"
-            >
+            <ToggleGroupItem value="user" aria-label="User">
               <UserRound className="h-5 w-5" />
               <span className="text-xs">Patient</span>
             </ToggleGroupItem>
-            <ToggleGroupItem
-              value="professional"
-              aria-label="Professional"
-              className="flex flex-col items-center gap-1 px-6 py-2"
-            >
+            <ToggleGroupItem value="professional" aria-label="Professional">
               <Briefcase className="h-5 w-5" />
               <span className="text-xs">Doctor</span>
             </ToggleGroupItem>
@@ -52,61 +119,72 @@ export default function RegisterForm() {
         </div>
       </div>
 
-      {/* Main Form */}
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        {/* Common Fields */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">Name</Label>
-            <Input id="firstName" placeholder="John" required />
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" value={formData.name} onChange={handleChange} required />
+          </div>
+          <div>
+            <Label htmlFor="gender">Gender</Label>
+            <Select onValueChange={(val) => handleSelectChange("gender", val)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div>
           <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            required
-          />
+          <Input id="email" type="email" value={formData.email} onChange={handleChange} required />
         </div>
 
-        <div className="space-y-2">
+        <div>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required />
+          <Input id="password" type="password" value={formData.password} onChange={handleChange} required />
         </div>
 
-        <div className="space-y-2">
+        <div>
           <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <Input id="confirmPassword" type="password" required />
+          <Input id="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} required />
         </div>
 
         <AnimatePresence mode="wait">
           {role === "user" && (
             <motion.div
-              key="user-fields"
+              key="patient-fields"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4 overflow-hidden"
+              className="overflow-hidden"
             >
-              {/* Add any user-specific fields here if needed */}
+              <div className="space-y-2">
+                <Label htmlFor="dob">Date of Birth</Label>
+                <Input id="dob" type="date" value={formData.dob} onChange={handleChange} required />
+              </div>
             </motion.div>
           )}
 
           {role === "professional" && (
             <motion.div
-              key="professional-fields"
+              key="doctor-fields"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4 overflow-hidden"
+              className="overflow-hidden space-y-4"
             >
-              <div className="space-y-2">
-                <Label htmlFor="specialty">Specialty</Label>
-                <Select>
+              <div>
+                <Label htmlFor="speciality">Speciality</Label>
+                <Select onValueChange={(val) => handleSelectChange("speciality", val)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your specialty" />
                   </SelectTrigger>
@@ -118,12 +196,17 @@ export default function RegisterForm() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <div>
+                <Label htmlFor="department">Department</Label>
+                <Input id="department" value={formData.department} onChange={handleChange} required />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <Button type="submit" className="w-full">
-          Create Account
+        <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
+          {loading ? "Creating..." : "Create Account"}
         </Button>
       </form>
     </div>
